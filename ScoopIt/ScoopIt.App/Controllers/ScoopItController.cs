@@ -16,10 +16,11 @@ namespace ScoopIt.App.Controllers
 
     public class ScoopItController : Controller
     {
-        //
-        // GET: /ScoopIt/
+        #region Attributes
         private AccessTokenModel _accessTokenModel;
+#endregion
 
+        #region Properties
         public AccessTokenModel AccessTokenModel
         {
             get
@@ -36,7 +37,9 @@ namespace ScoopIt.App.Controllers
                 _accessTokenModel = value;
             }
         }
+        #endregion
 
+        #region Action
 
         public ActionResult Index(int page = 0)
         {
@@ -84,10 +87,16 @@ namespace ScoopIt.App.Controllers
             if (accessTokenModel != null)
             {
                 this.AccessTokenModel = accessTokenModel;
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Content("Error");
             }
 
-            return RedirectToAction("Index");
+
         }
 
+        #endregion
     }
 }
