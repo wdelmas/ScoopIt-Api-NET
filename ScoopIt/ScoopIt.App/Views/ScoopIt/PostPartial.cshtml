@@ -1,0 +1,113 @@
+﻿@model  Scoopit.Api.Model.Post
+@{
+   
+    
+   
+    var isPinnedPost = false;
+
+    var inPopup = false;
+
+
+}
+<div class="onePost @if (isPinnedPost && !inPopup)
+                    { @Html.Raw("sticky")} ">
+    <div class="clear"></div>
+
+    <!-- POST META -->
+    <div class="metas">
+        <div class="sourceicon">
+            <img width="16px" src="@Model.Source.IconUrl">
+        </div>
+        @if (Model.TwitterAuthor != null)
+        { 
+
+            <span><a href="http://www.twitter.com/@Model.TwitterAuthor">< @@@Model.TwitterAuthor> </a></span> 
+            @Html.Raw("-")
+        }
+        else
+        { 
+
+            <span><a
+                                   
+                                   @if (Model.Source.Url == "http://www.scoop.it/u/itpartners")
+                                   {
+                                       @Html.Raw(" href='http://www.itpartners.fr/?IdNode=4674'")
+                                   }
+                                   else
+                                   {
+                                       @Html.Raw(string.Format("href='{0}'", Model.Topic.Url))
+
+
+                                   }
+                                 >@Model.Source.Name  </a></span>
+ @Html.Raw("-")
+        }
+        <span> @Model.UnixTimestampToDateTime().ToLongDateString()</span>
+    </div>
+
+
+    <!-- POST TITLE -->
+    <div class="title">
+        <h2 class="postTitleView">
+           
+            <a href="@Model.ScoopUrl" target="_blank" id="post_title">@Model.Title</a>
+        </h2>
+    </div>
+
+
+    <!-- HTML FRAGMENT OR IMAGE URL -->
+
+    @if (Model.HtmlFragment != null)
+    { 
+
+        <div class="htmlFragment">@Html.Raw(Model.HtmlFragment)</div>
+    }
+    else if (Model.ImageUrl != null)
+    { 
+
+        <div class="image">
+            <a href="@Model.Url>" target="_blank" id="post_title">
+                <img src="@Model.ImageUrl?>" onload="adjustImage(this, 'false')"/>
+            </a>
+        </div> 
+    }
+
+
+    <div class="description">
+        <div id="post_description">
+            @if (Model.HtmlContent != null)
+            {
+                @Html.Raw(Model.HtmlContent)
+            }
+            else
+            {
+                @Html.Raw(Model.Content)
+            }
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div style="clear: both"></div>
+
+</div>
+
+<!-- SHARE AREA -->
+<table cellspacing="0" cellpadding="0" class="actionsBar">
+    <tr>
+        <td>
+            <div class="clear">
+                <!-- SOURCE -->
+                <div class="postSource">
+                    @if (@Model.Url != null)
+                    {
+                    Source: 
+                        <a target="_blank" href="@Model.Url">@Model.Source.Name		            	</a>
+                    }
+                </div>
+            </div>
+        </td>
+
+    </tr>
+</table>
+
+

@@ -1,0 +1,148 @@
+﻿@model  ScoopIt.App.Models.TopicViewModel
+@{
+ 
+
+}
+
+<div id="scit_viewbox">
+    <table cellpadding="0" cellspacing="0" width="100%">
+        <tr valign="top">
+            <td width="50%" style="padding-right: 10px">
+                @{ 
+                    var absoluteCounter = (Model.Page - 1) * Model.CuratedCount;
+
+                    if ((Model.Topic.PinnedPost != null) && Model.Page == 1)
+                    {
+                        var post = Model.Topic.PinnedPost;
+                        @Html.Partial("PostPartial", Model.Topic.PinnedPost)
+                    }
+
+                    for (int i = 0; i < Model.Topic.CuratedPosts.Count(); i++)
+                    {
+                  
+                        var post = Model.Topic.CuratedPosts[i];
+                        bool condition;
+                        if ((Model.Topic.PinnedPost != null) && Model.Page == 1 && i == 0)
+                        {
+                            condition = (i - 1) % 2 == 0;
+                        }
+                        else
+                        {
+                            condition = (i - 1) % 2 != 0;
+                        }
+                        if (condition && ((Model.Topic.PinnedPost == null) || post.Id != Model.Topic.PinnedPost.Id))
+                        {
+                            var absolutePosition = absoluteCounter + i;
+                            @Html.Partial("PostPartial", post)
+                        }
+                    }
+							
+                }
+            </td>
+            <td width="50%">
+                @for (int i = 0; i < Model.Topic.CuratedPosts.Count(); i++)
+                {
+                    bool condition;
+                    var post = Model.Topic.CuratedPosts[i];
+                    if ((Model.Topic.PinnedPost != null) && Model.Page == 1 && i == 0)
+                    {
+                        condition = (i - 1) % 2 != 0;
+                    }
+                    else
+                    {
+                        condition = (i - 1) % 2 == 0;
+                    }
+                    if (condition && ((Model.Topic.PinnedPost == null) || post.Id != Model.Topic.PinnedPost.Id))
+                    {
+                        var absolutePosition = absoluteCounter + i;
+                        @Html.Partial("PostPartial", post)
+                    }
+                }
+            </td>
+        </tr>
+    </table>
+    
+    <!-- PAGINATION -->
+@if (Model.PageCount > 1)
+{
+
+    <center>
+        <table class="paginator" cellspacing="0" cellpadding="0" style="border-collapse: collapse">
+            <tr>
+                <td class="previousNext">
+	                  
+                    @if (Model.Page == 1)
+                    {
+                        @Html.Raw("Previous")
+                    }
+                    else
+                    {
+                        @Html.Raw("<a href='?page= " + (Model.Page - 1) + "'>Previous</a>")
+                    }
+	                    
+                </td>
+                <td class="previous">
+                    <img src="/content/img/paginator/previous.png" alt="" />
+                </td>
+                @if (Model.Page > 4)
+                {
+                    <td class="page"><a href="?page=1">1</a></td>
+                    <td class="petitsPoints">...</td>
+                } 
+                @if (Model.Page > 3)
+                {
+                    <td class="page"><a href="?page=@(Model.Page - 3)">@(Model.Page - 3)</a></td>
+                } 
+                @if (Model.Page > 2)
+                {
+                    <td class="page"><a href="?page=@(Model.Page - 2)">@(Model.Page - 2)</a></td>
+                }
+                @if (Model.Page > 1)
+                {
+                    <td class="page"><a href="?page=@(Model.Page - 1)">@(Model.Page - 1)</a></td>
+                } 
+
+                <td class="page"><span class="selected">@Model.Page</span></td>
+
+                @if (Model.Page + 1 <= Model.PageCount)
+                {
+                    <td class="page"><a href="?page=@(Model.Page + 1)">@(Model.Page + 1)</a></td>
+                } 
+                @if (Model.Page + 2 <= Model.PageCount)
+                {
+                    <td class="page"><a href="?page=@(Model.Page + 2)">@(Model.Page + 2)</a></td>
+                } 
+                @if (Model.Page + 3 <= Model.PageCount)
+                {
+                    <td class="page"><a href="?page=@(Model.Page + 3)">@(Model.Page + 3)</a></td>
+                }@if (Model.Page + 4 <= Model.PageCount)
+                 {
+                     <td class="petitsPoints">...</td>
+                     <td class="page"><a href="?page=@Model.PageCount">@Model.PageCount</a></td>
+                 } 
+                <td class="next">
+                    <img src="/content/img/paginator/next.png" alt="" />
+                </td>
+                <td class="previousNext">
+                    @if (Model.Page > Model.PageCount - 1)
+                    {
+                        @Html.Raw("Next")
+                    }
+                    else
+                    {
+                        @Html.Raw("<a href='?page=" + (Model.Page + 1) + "'>Next</a>")
+                    }
+                          
+                </td>
+                            
+                            
+            </tr>
+        </table>
+    </center>
+   
+  
+}
+      </div>
+
+
+
