@@ -38,13 +38,13 @@ namespace ScoopIt.Api.Service
             {
                 if (this._topicId == 0)
                 {
-                    this._topicId = long.Parse(HttpContext.Current.Session["TopicId"] as string);
+                    this._topicId = long.Parse(HttpContext.Current.Application["TopicId"] as string);
                 }
                 return this._topicId;
             }
             set
             {
-                HttpContext.Current.Session["TopicId"] = value;
+                HttpContext.Current.Application["TopicId"] = value;
                 this._topicId = value;
 
             }

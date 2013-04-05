@@ -8,7 +8,7 @@ namespace ScoopIt.Api.OAuth.Model
 {
     public class AccessTokenModel
     {
-        public  string Token { get; set; }
-        public  string TokenSecret { get; set; }
+        public string Token { get; set; }
+        public string TokenSecret { get; set; }
     }
 }
