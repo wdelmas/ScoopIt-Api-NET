@@ -13,7 +13,7 @@ namespace ScoopIt.App.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "ScoopIt");
+            return RedirectToAction("AnonymousIndex", "ScoopIt");
         }
 
     }

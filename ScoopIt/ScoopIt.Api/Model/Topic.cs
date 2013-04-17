@@ -87,19 +87,19 @@ namespace Scoopit.Api.Model
             var topic = new Topic();
             topic.Id = (long)obj["id"];
             topic.SmallImageUrl = (string)obj["smallImageUrl"];
+            topic.Description = (string)obj["description"];
             topic.MediumImageUrl = (string)obj["mediumImageUrl"];
             topic.LargeImageUrl = (string)obj["largeImageUrl"];
             topic.BackgroundImage = (string)obj["backgroundImage"];
             topic.BackgroundRepeat = (string)obj["backgroundRepeat"];
             topic.BackgroundColor = (string)obj["backgroundColor"];
-            topic.Description = (string)obj["description"];
             topic.Name = (string)obj["name"];
             topic.Shortname = (string)obj["shortname"];
             topic.Url = (string)obj["url"];
             topic.IsCurator = (bool)obj["isCurator"];
-            topic.CurablePostCount = (int)obj["curablePostCount"];
+            //topic.CurablePostCount = (int)obj["curablePostCount"];
             topic.CuratedPostCount = (int)obj["curatedPostCount"];
-            topic.UnreadPostCount = (int)obj["unreadPostCount"];
+            //topic.UnreadPostCount = (int)obj["unreadPostCount"];
 
             topic.Creator = User.GetFromJSON((JObject)obj["creator"]);
 

@@ -10,7 +10,8 @@ namespace ScoopIt.App.Controllers
     using ScoopIt.Api.OAuth;
     using ScoopIt.Api.OAuth.Model;
     using ScoopIt.Api.Service;
-    using ScoopIt.Api.Service.Mode;
+    using ScoopIt.Api.Service.Model;
+    using ScoopIt.Api.Service.Model;
     using ScoopIt.App.Models;
 
 
@@ -18,7 +19,7 @@ namespace ScoopIt.App.Controllers
     {
         #region Attributes
         private AccessTokenModel _accessTokenModel;
-#endregion
+        #endregion
 
         #region Properties
         public AccessTokenModel AccessTokenModel
@@ -41,6 +42,12 @@ namespace ScoopIt.App.Controllers
 
         #region Action
 
+        /// <summary>
+        /// Authorize mode
+        /// http://www.scoop.it/dev/api/1/intro
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public ActionResult Index(int page = 0)
         {
             if (this.AccessTokenModel == null)
@@ -49,22 +56,33 @@ namespace ScoopIt.App.Controllers
             }
             else
             {
-                var topicPage = new TopicViewModel();
-                topicPage.Topic = new AuthorizeScoopItAccess(this.AccessTokenModel).Api.GetTopic(ConfigurationManager.AppSettings["TOPIC_Name"], topicPage.Page);
-                topicPage.InitModel(page);
+                var authorizeaccess = new AuthorizeAccess(this.AccessTokenModel);
+                var topic = new ScoopItService(authorizeaccess).GetTopic(
+                                ConfigurationManager.AppSettings["TOPIC_Name"], page);
+
+                //ViewModel
+                var topicPage = new TopicViewModel(page, topic);
 
                 return this.View(topicPage);
             }
-            
+
         }
 
+        /// <summary>
+        /// Anonymous Mode
+        /// http://www.scoop.it/dev/api/1/intro
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public ActionResult AnonymousIndex(int page = 0)
         {
-            var topicPage = new TopicViewModel();
-            topicPage.Topic = new AnonymousScoopItAccess().Api.GetTopic(ConfigurationManager.AppSettings["TOPIC_Name"], topicPage.Page);
-            topicPage.InitModel(page);
+            var topic = new ScoopItService().GetTopic(
+                               ConfigurationManager.AppSettings["TOPIC_Name"], page);
 
-            return this.View("Index",topicPage);
+            //ViewModel
+            var topicPage = new TopicViewModel(page, topic);
+
+            return this.View("Index", topicPage);
         }
 
         public ActionResult AuthenticateToScoopIt()

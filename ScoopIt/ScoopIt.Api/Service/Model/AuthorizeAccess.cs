@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScoopIt.Api.Service.Mode
+namespace ScoopIt.Api.Service.Model
 {
     using Hammock;
     using Hammock.Authentication.OAuth;
@@ -12,13 +12,12 @@ namespace ScoopIt.Api.Service.Mode
     using ScoopIt.Api.OAuth;
     using ScoopIt.Api.OAuth.Model;
 
-    public class AuthorizeScoopItAccess
+    public class AuthorizeAccess
     {
         #region Properties
 
         public AccessTokenModel AccessTokenModel { get; set; }
-        public ScoopItService Api { get; set; }
-        private OAuthCredentials AccessCredentials
+        public OAuthCredentials AccessCredentials
         {
             get
             {
@@ -39,10 +38,9 @@ namespace ScoopIt.Api.Service.Mode
 
         #region Constructor
 
-        public AuthorizeScoopItAccess(AccessTokenModel accessTokenModel)
+        public AuthorizeAccess(AccessTokenModel accessTokenModel)
         {
             this.AccessTokenModel = accessTokenModel;
-            this.Api = new ScoopItService(this.AccessCredentials);
         }
 
         #endregion

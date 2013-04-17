@@ -61,7 +61,7 @@ namespace Scoopit.Api.Model
         /** height in pixel of the original post image */
         public int ImageHeight { get; set; }
         /** size of the post image in the topic view */
-        public int ImageSize { get; set; }
+        public String ImageSize { get; set; }
         /**
          * position of the post image in the topic view: "left" | "center" | "right"
          */
@@ -98,7 +98,7 @@ namespace Scoopit.Api.Model
             }
 
             var post = new Post();
-            post.Id = (int)obj["id"];
+            post.Id = (long)obj["id"];
             post.Content = (string)obj["content"];
             post.HtmlFragment = (string)obj["htmlFragment"];
             post.HtmlContent = (string)obj["htmlContent"];
@@ -113,9 +113,15 @@ namespace Scoopit.Api.Model
             post.MediumImageUrl = (string)obj["mediumImageUrl"];
             post.ImageUrl = (string)obj["imageUrl"];
             post.LargeImageUrl = (string)obj["largeImageUrl"];
-            post.ImageWidth = (int)obj["imageWidth"];
-            post.ImageHeight = (int)obj["imageHeight"];
-            post.ImageSize = (int)obj["imageSize"];
+            if (obj["imageWidth"] != null)
+            {
+                post.ImageWidth = (int)obj["imageWidth"];
+            }
+            if (obj["imageHeight"] != null)
+            {
+                post.ImageHeight = (int)obj["imageHeight"];
+            }
+            post.ImageSize = (string)obj["imageSize"];
             post.ImagePosition = (string)obj["imagePosition"];
             post.ImageUrls = new List<String>();
             var array = (JArray)obj["imageUrls"];
@@ -138,7 +144,10 @@ namespace Scoopit.Api.Model
             post.CommentsCount = (int)obj["commentsCount"];
             post.IsUserSuggestion = (Boolean)obj["isUserSuggestion"];
             post.PageViews = (long)obj["pageViews"];
-            post.Edited = (Boolean)obj["edited"];
+            if (obj["edited"] != null)
+            {
+                post.Edited = (Boolean)obj["edited"];
+            }
             post.PublicationDate = (long)obj["publicationDate"];
 
 

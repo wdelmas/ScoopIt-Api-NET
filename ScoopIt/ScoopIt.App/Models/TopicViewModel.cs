@@ -31,19 +31,15 @@ namespace ScoopIt.App.Models
         /// </p>
         /// </summary>
         /// <param name="page"> page number of curated post to retrieve</param>
-        /// <param name="scoopItRequest">access tokens and request tokense</param>
-
-        public TopicViewModel()
+       public TopicViewModel(int page, Topic topic)
         {
-            this.CuratedCount = int.Parse(ConfigurationManager.AppSettings["CuratedCount"]);
-        }
-
-        public void InitModel(int page)
-        {
+            this.CuratedCount = int.Parse(ConfigurationManager.AppSettings["NumberPostPerPage"]);
+            this.Topic = topic;
             this.Page = page;
             this.TotalPostCount = this.Topic.CuratedPostCount;
             this.PageCount = Math.Ceiling(this.TotalPostCount / this.CuratedCount);
         }
+
         #endregion
     }
 }

@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScoopIt.Api.Service.Mode
+namespace ScoopIt.Api.Service.Model
 {
     using Hammock.Authentication.OAuth;
     using ScoopIt.Api.OAuth;
     using ScoopIt.Api.OAuth.Model;
 
-    public class AnonymousScoopItAccess
+    public class AnonymousAccess
     {
         #region Proerties
 
         public ScoopItService Api { get; set; }
-        private OAuthCredentials AccessCredentials
+        public OAuthCredentials AccessCredentials
         {
             get
             {
@@ -34,9 +34,9 @@ namespace ScoopIt.Api.Service.Mode
 
         #region Constructor
 
-        public AnonymousScoopItAccess()
+        public AnonymousAccess()
         {
-            this.Api = new ScoopItService(this.AccessCredentials);
+           
         }
 
         #endregion

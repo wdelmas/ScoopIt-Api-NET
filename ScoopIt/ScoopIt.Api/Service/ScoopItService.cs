@@ -16,6 +16,7 @@ namespace ScoopIt.Api.Service
     using Newtonsoft.Json.Linq;
     using ScoopIt.Api.OAuth;
     using ScoopIt.Api.OAuth.Model;
+    using ScoopIt.Api.Service.Model;
     using Scoopit.Api.Model;
 
     public class ScoopItService
@@ -26,7 +27,7 @@ namespace ScoopIt.Api.Service
         #endregion
 
         #region Attribute
-
+        
         private long _topicId;
         #endregion
 
@@ -53,7 +54,25 @@ namespace ScoopIt.Api.Service
 
         #region Contructor
 
-        public ScoopItService(OAuthCredentials oAuthCredentials)
+        /// <summary>
+        /// Default Anonymous mode
+        /// </summary>
+        public ScoopItService()
+        {
+            var anonymousScoopItAccess = new AnonymousAccess();
+            this.InitScoopItService(anonymousScoopItAccess.AccessCredentials);
+        }
+
+        /// <summary>
+        /// Authorize Mode
+        /// </summary>
+        /// <param name="authorizeAccess"></param>
+        public ScoopItService(AuthorizeAccess authorizeAccess)
+        {
+            this.InitScoopItService(authorizeAccess.AccessCredentials);
+        }
+
+        public void InitScoopItService(OAuthCredentials oAuthCredentials)
         {
             this.RestClient = new RestClient()
             {
@@ -62,6 +81,7 @@ namespace ScoopIt.Api.Service
                 Method = WebMethod.Get
             };
         }
+
         #endregion
 
         #region Helper
@@ -295,47 +315,13 @@ namespace ScoopIt.Api.Service
             JToken topicId = null;
             if (topic.TryGetValue("id", out topicId))
             {
-                toReturn = new Topic();
+                toReturn = Topic.GetFromJSON(topic);
 
-                var topicIdDouble = long.Parse(topicId.ToString());
-                toReturn.Id = topicIdDouble;
 
-                JToken topicName = null;
-                topic.TryGetValue("name", out topicName);
-                toReturn.Name = (String)topicName;
-
-                JToken url = null;
-                topic.TryGetValue("url", out url);
-                toReturn.Url = (String)url;
-
-                JToken curablePostCount = null;
-                topic.TryGetValue("curatedPostCount", out curablePostCount);
-                toReturn.CuratedPostCount = (int)curablePostCount;
-
-                JToken topicImgUrl = null;
-                topic.TryGetValue("imageUrl", out topicImgUrl);
-                toReturn.MediumImageUrl = (String)topicImgUrl;
-
-                //get posts 
-                //images
-                JToken jsonPosts = null;
-                List<Post> posts = new List<Post>();
-                if (topic.TryGetValue("curatedPosts", out jsonPosts))
-                {
-                    JArray postsArray = jsonPosts as JArray;
-                    for (int j = 0; j < postsArray.Count; j++)
-                    {
-                        var onePost = postsArray[j] as JObject;
-                        var post = GetPostFromJsonObject(onePost, true);
-                        post.Topic = toReturn;
-                        posts.Add(post);
-                    }
-                }
-                toReturn.CuratedPosts = posts;
             }
             return toReturn;
         }
-        
+
         #endregion
     }
 }

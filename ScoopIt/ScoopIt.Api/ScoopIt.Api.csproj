@@ -58,8 +58,8 @@
     <Compile Include="OAuth\OauthAuthorizeService.cs" />
     <Compile Include="OAuth\OauthUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\Mode\AnonymousScoopItAccess.cs" />
-    <Compile Include="Service\Mode\AuthorizeScoopItAccess.cs" />
+    <Compile Include="Service\Model\AnonymousAccess.cs" />
+    <Compile Include="Service\Model\AuthorizeAccess.cs" />
     <Compile Include="Service\ScoopItService.cs" />
   </ItemGroup>
   <ItemGroup>
