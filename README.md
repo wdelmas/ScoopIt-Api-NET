@@ -8,14 +8,15 @@ INSTRUCTIONS
 - Do not hesitate to contribute!
 
 Web.config:
-<pre>
+
+	 ```xml
 	<add key="CONSUMER_KEY" value="Your consumer key"/>
     <add key="CONSUMER_SECRET" value="Your consumer secret"/>
     <add key="CALLBACK" value="/Scoopit/CallbackFromScoopIt"/>
     <!--  Below you will enter your topic Id and the number of posts that you want on each page -->
     <add key="TOPIC_Name" value="asp-web-development"/>
     <add key="NumberPostPerPage" value="10"/>
-</pre>
+    ```
 
 LINKS:
 - Scoop.it Developers Home : http://www.scoop.it/dev
