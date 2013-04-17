@@ -4,7 +4,7 @@ A basic .NET framework to access the Scoop.it API and a test project (ASP MVC3).
 
 INSTRUCTIONS
 
-- Modify the web.config with yours consumer key and consumer secret (https://www.scoop.it/apps)
+- Modify the web.config with your consumer key and consumer secret (https://www.scoop.it/apps)
 - Do not hesitate to contribute!
 
 Web.config:
