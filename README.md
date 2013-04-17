@@ -1,6 +1,7 @@
 ScoopIt .NET Api
 ===============
 A basic .NET framework to access the Scoop.it API and a test project (ASP MVC3).
+(Some feature still need to be developed in order to cover the whole Api)
 
 INSTRUCTIONS
 
