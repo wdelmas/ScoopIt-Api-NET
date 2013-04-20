@@ -21,13 +21,15 @@ namespace ScoopIt.Api.Service
 
     public class ScoopItService
     {
+
         #region API PATH
         private const String REQUEST_TOPIC = "api/1/topic";
+        private const String REQUEST_POST = "api/1/post";
         private const String REQUEST_RESOLVER = "api/1/resolver";
         #endregion
 
         #region Attribute
-        
+
         private long _topicId;
         #endregion
 
@@ -128,7 +130,7 @@ namespace ScoopIt.Api.Service
         /// <param name="page"> page number of curated post to retrieve</param>
         ///  <param name="curated">curated number of post per page</param>
         ///  <returns>Topic</returns>
-        public Topic GetTopic(string topicName, int page = 0, int curated = 20)
+        public Topic GetTopic(string topicName, int page = 0, int curated = 10)
         {
             var request = new RestRequest { Path = REQUEST_TOPIC, };
             this.TopicId = this.ResolveTopicIdFromTopicName(topicName);
@@ -156,6 +158,27 @@ namespace ScoopIt.Api.Service
             return topicToreturn;
         }
 
+
+        public Post GetPost(long postId)
+        {
+            var request = new RestRequest { Path = REQUEST_POST, };
+
+            request.AddParameter("id", postId.ToString());
+            request.AddParameter("ncomments", "100");
+
+            Post postToreturn = new Post();
+            using (var reader = new StringReader(this.RestClient.Request(request).Content))
+            {
+                JObject obj = JObject.Load(new JsonTextReader(reader));
+
+
+                postToreturn = this.GetPostFromJsonObject(obj, false);
+
+
+            }
+
+            return postToreturn;
+        }
         /// <summary>
         /// Create a Post From a Json object
         /// </summary>
@@ -166,97 +189,10 @@ namespace ScoopIt.Api.Service
         {
             Post toReturn = null;
 
-            JToken title = null;
-            if (post.TryGetValue("title", out title))
+            JToken topicId = null;
+            if (post.TryGetValue("id", out topicId))
             {
-                toReturn = new Post();
-
-                //TITLE
-                toReturn.Title = (String)title;
-
-                //DATES
-                JToken curationDate = null;
-                if (post.TryGetValue("curationDate", out curationDate))
-                {
-                    toReturn.CurationDate = long.Parse(curationDate.ToString());
-                }
-                JToken publicationDate = null;
-                if (post.TryGetValue("publicationDate", out publicationDate))
-                {
-                    toReturn.PublicationDate = long.Parse(publicationDate.ToString());
-                }
-
-                //images
-                JToken jsonImageUrls = null;
-                String imageUrl = null;
-                List<String> imageUrls = new List<string>();
-                if (post.TryGetValue("imageUrls", out jsonImageUrls))
-                {
-                    var imageUrlsArray = jsonImageUrls as JArray;
-                    for (int j = 0; j < imageUrlsArray.Count; j++)
-                    {
-                        if (j == 0 && !curated)
-                        {
-                            imageUrl = (String)imageUrlsArray[j];
-                            toReturn.ImageUrl = imageUrl;
-                        }
-                        imageUrls.Add((String)imageUrlsArray[j]);
-                    }
-                }
-                toReturn.ImageUrls = imageUrls;
-                toReturn.ImageUrl = imageUrl;
-
-
-                if (curated)
-                {
-                    JToken imageUrlJson = null;
-                    post.TryGetValue("imageUrl", out imageUrlJson);
-                    toReturn.ImageUrl = (String)imageUrlJson;
-                }
-
-                //url
-                JToken url = null;
-                post.TryGetValue("url", out url);
-                toReturn.Url = (String)url;
-
-                //url in scoop.it
-                JToken scoopUrl = null;
-                post.TryGetValue("scoopUrl", out scoopUrl);
-                toReturn.ScoopUrl = (String)scoopUrl;
-
-                //CONTENT
-                JToken content = null;
-                post.TryGetValue("content", out content);
-                toReturn.Content = (String)content;
-
-                //TITLE
-                post.TryGetValue("title", out title);
-                toReturn.Title = (string)title;
-
-                //ID
-                JToken id = null;
-                if (post.TryGetValue("id", out id))
-                {
-                    var realId = long.Parse(id.ToString());
-                    toReturn.Id = realId;
-                }
-
-                //TOPIC
-                JToken topic = null;
-                if (post.TryGetValue("topic", out topic))
-                {
-                    var topicObject = topic as JObject;
-                    toReturn.Topic = GetTopicFromJsonObject(topicObject);
-                }
-
-                //SOURCE
-
-                JToken source = null;
-                if (post.TryGetValue("source", out source))
-                {
-                    JObject sourceObject = source as JObject;
-                    toReturn.Source = GetSourceFromJsonObject(sourceObject);
-                }
+                toReturn = Post.GetFromJSON(post);
 
 
             }
@@ -271,7 +207,6 @@ namespace ScoopIt.Api.Service
         public Source GetSourceFromJsonObject(JObject source)
         {
             Source toReturn = null;
-
             JToken topicId = null;
             if (source.TryGetValue("id", out topicId))
             {
